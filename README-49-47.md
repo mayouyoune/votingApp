@@ -249,18 +249,17 @@ deal with them in Docker at a basic level.
 
 - You need to fork this project to your own public github repository
 - You need to submit your own public github repository with the required files (`Dockerfile`, `compose.yml`, `docker-compose.build.yml` etc....).
-- This need to be done inside a VMWare EXSI host with 3 VMs. One will act as the master and the two others workers worker1 worker2.
-- Deploy the app first using docker compose
-- Deploy the app inside a kubernetes cluster
-- Make sure the kubernetes components are up and running (api-server, kubelet, kubeproxy and so on...)
-- This need to be in a team of 3 MAXIMUM. No single submission is allowed. Please do not use docker desktop to do the job
+- This need to be done inside a virtual machine on a VMWare EXSI.
+- First you need to deploy the entiere application by using docker commands only. No automation here
+- The deployment need to be inside a dedicated network called `cats-or-dogs-network`
+- Then you can automate the deployment using using docker compose
+- No single submission is allowed. Please do not use docker desktop to do the job
 - Take all the necessary screenshots that will showcase your work
 - The moodle is `G-[YOUR-CREW]`. You need to submit before the deadline.
 - Make sure your team members name is visible inside your pdf file
+- Create a SUBMISSION.md file that shows the steps required to deploy this apps. This file is different than the pdf.
 
 ### Usefull links
 
-- https://kubernetes.io/docs/setup/production-environment/tools/
 - https://docs.docker.com/engine/install/ubuntu/
 - https://docs.docker.com/compose/gettingstarted/
-- https://kubernetes.io/docs/reference/kubectl/cheatsheet/
