@@ -95,4 +95,5 @@ volumes:
 networks:
   front-tier:
   back-tier:
-
+  cats-or-dogs-network:
+    driver: bridge
