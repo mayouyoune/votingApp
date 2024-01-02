@@ -1,0 +1,53 @@
+version: '3.8'
+services:
+  # Worker service
+  worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+
+  # Vote service
+  vote:
+    build:
+      context: ./vote
+      dockerfile: Dockerfile
+
+  # Seed data service
+  seed-data:
+    build:
+      context: ./seed-data
+      dockerfile: Dockerfile
+
+  # Result service
+  result:
+    build:
+      context: ./result
+      dockerfile: Dockerfile
+
+  # Database service
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - "./healthchecks:/healthchecks"
+    healthcheck:
+      test: /healthchecks/postgres.sh
+      interval: "5s"
+    networks:
+      - back-tier
+      - cats-or-dogs-network
+
+  # Redis service
+  redis:
+    image: redis
+
+networks:
+  back-tier:
+  cats-or-dogs-network:
+
+volumes:
+  db-data:
+
