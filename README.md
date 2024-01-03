@@ -80,7 +80,7 @@ La mise en place d'un cluster Kubernetes permet une gestion avancée des contene
 Après l'installation de kubernetes et de kubectl, nous utilisons Minikube qui permet de mettre en place un cluster Kubernetes local sur une machine individuelle.
 $ minikube start  
 
-Les fichiers yaml pour lancer l’application dans un cluster Kubernetes se trouvent dans notre répositoire k8s-specification. 
+Les fichiers yaml pour lancer l’application dans un cluster Kubernetes se trouvent dans notre répertoire k8s-specification. 
 
 On instancie les déploiements à partir des fichiers YAML : $ kubectl create -f k8s-specifications/ 
 Vérifions que les configurations ont bien été déployés :  $ kubectl get deployments       et     $ kubectl get pods  
