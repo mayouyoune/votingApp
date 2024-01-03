@@ -1,53 +1,74 @@
 # HumansBestFriend app? CATs or DOGs ?
 
-A simple distributed application running across multiple Docker containers.
+## Investigateurs
 
-## Requirement
+- Mayane MAMANE
+- Maxime JANEZ
+- Geoffroy RODRIGUEZ
 
-- The project need to be done inside a virtual machine that run docker and docker compose. Follow the docker documentation as we saw during the course for installation instructions if you don't have it yet.
 
-## Getting started
+## Introduction
+Le projet HumansBestFriend consiste en la conception d'une infrastructure de vote virtuelle, en utilisant les concepts de virtualisation et de conteneurisation.
 
-This solution uses Python, Node.js, .NET, with Redis for messaging and Postgres for storage.
+Nous voulons créer une application permettant de voter en temps réel pour le chien ou pour le chat, et afficher les résultats.
 
-## Tasks
+Pour ce faire, nous créons un environnement virtualisé avec VMware ESXI pour exécuter une machine virtuelle Ubuntu et utiliser des conteneurs Docker.
 
-1. Create a file called docker-compose.build.yml (not running containers). This file will be responsable for building the application images from the Dockerfile contents provided.
 
-### For `worker` service
+## Prérequis
 
-- The worker `depends_on` `redis` and `db`. Make use of below in your compose file
+Pour réaliser cette application, nous avons besoin d'une machine virtuelle ESXI sur VMware qui permet d'utiliser Docker et docker compose.
+L'installation de ces outils est détaillée dans le rapport du projet.
 
-```shell
- depends_on:
-   redis:
-     condition: service_healthy
-   db:
-     condition: service_healthy
-```
 
-- The worker need to be inside `back-tier` network
+## Technologies et composants utilisés
 
-```bash
-FROM --platform=${BUILDPLATFORM} mcr.microsoft.com/dotnet/sdk:7.0 as build
-ARG TARGETPLATFORM
-ARG TARGETARCH
-ARG BUILDPLATFORM
-RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM"
+1. Front-End Web App en Python pour Voter : Cette application offre une interface utilisateur conviviale permettant aux utilisateurs de
+    voter entre deux options, chats et chiens, dans un environnement web. 
 
-WORKDIR /source
-COPY *.csproj .
-RUN dotnet restore -a $TARGETARCH
+2. Redis pour la Collecte des Votes : Utilisé comme système de stockage clé-valeur, Redis joue un rôle essentiel dans la collecte instantanée
+    et la gestion des nouveaux votes entrants. 
 
-COPY . .
-RUN dotnet publish -c release -o /app -a $TARGETARCH --self-contained false --no-restore
+3. Travailleur .NET pour la Gestion des Votes : Ce composant consomme les votes enregistrés et les stocke dans une base de données PostgreSQL,
+    assurant ainsi la persistance des données de manière efficace et fiable. 
 
-# app image
-FROM mcr.microsoft.com/dotnet/runtime:7.0
-WORKDIR /app
-COPY --from=build /app .
-ENTRYPOINT ["dotnet", "Worker.dll"]
-```
+4. Base de Données PostgreSQL avec Volume Docker : PostgreSQL est utilisé comme système de gestion de base de données relationnelle,
+    intégré dans un conteneur Docker avec un volume dédié pour garantir la préservation des données. 
+
+5. Application Web Node.js pour Afficher les Résultats en Temps Réel : Cette application présente les résultats du vote de manière dynamique
+    et en temps réel, offrant une expérience utilisateur enrichie.
+
+   
+
+## Création des fichiers docker-compose.build.yml et docker-compose.yml
+
+D'abord nous clonons le projet sur notre machine Ubuntu: $ git clone https://github.com/pascalito007/esiea-ressources.git
+
+1. Création du fichier docker-compose.build.yml.
+   
+Ce fichier gère la création des images d'application à partir du contenu du fichier Docker fourni.
+Il permet de décrire et d'orchestrer les différentes parties de l'application, simplifiant ainsi le processus de déploiement et de gestion des conteneurs.
+
+Exécution du fichier: $ docker-compose -f docker-compose.build.yml build 
+Vérifier si les images sont bien lancées: $ docker-compose -f docker-compose.build.yml up 
+
+2. Création du fichier docker-compose.yml
+
+Ce fichier permet le lancement de l'application.
+Il définit les paramètres pour démarrer les conteneurs de manière cohérente et pour interconnecter les différents services d'une application,
+ce qui facilite le déploiement et la gestion de l'application dans différents environnements, comme le développement, le test et la production.  
+
+La commande suivante permet de démarrer, d’exécuter et de connecter entre eux tous les services du fichier “docker-compose.yml“, 
+simplifiant ainsi le déploiement et la gestion d'une application complexe:
+
+$ docker-compose up
+
+Elle extrait d'abord les données puis crée les conteneurs.
+
+
+
+## Lancement de l'application depuis l'URL de recherche
+
 
 ### For `vote` service
 
@@ -245,22 +266,4 @@ This isn't an example of a properly architected perfectly designed distributed a
 example of the various types of pieces and languages you might see (queues, persistent data, etc), and how to
 deal with them in Docker at a basic level.
 
-# Submission
 
-- You need to fork this project to your own public github repository
-- You need to submit your own public github repository with the required files (`Dockerfile`, `compose.yml`, `docker-compose.build.yml` etc....).
-- This need to be done inside a VMWare EXSI host with 3 VMs. One will act as the master and the two others workers worker1 worker2.
-- Deploy the app first using docker compose
-- Deploy the app inside a kubernetes cluster
-- Make sure the kubernetes components are up and running (api-server, kubelet, kubeproxy and so on...)
-- This need to be in a team of 3 MAXIMUM. No single submission is allowed. Please do not use docker desktop to do the job
-- Take all the necessary screenshots that will showcase your work
-- The moodle is `G-[YOUR-CREW]`. You need to submit before the deadline.
-- Make sure your team members name is visible inside your pdf file
-
-### Usefull links
-
-- https://kubernetes.io/docs/setup/production-environment/tools/
-- https://docs.docker.com/engine/install/ubuntu/
-- https://docs.docker.com/compose/gettingstarted/
-- https://kubernetes.io/docs/reference/kubectl/cheatsheet/
